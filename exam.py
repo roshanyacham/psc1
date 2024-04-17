@@ -366,6 +366,8 @@ def handle_create_course(client_socket, request_data):
     client_socket.close()
 
 
+
+
 def handle_login(client_socket, request_data):
     # Extract username and password from request data
     request_lines = request_data.split('\n')
