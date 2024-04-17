@@ -5,6 +5,10 @@ import logging
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import datetime
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import cgi
+import urllib.parse
+
 
 # Database connection parameters - replace these with your actual database details
 DB_HOST = "localhost"
@@ -131,13 +135,21 @@ register_template = '''
 </body>
 </html>
 '''
-
-
-
-
-
-
-
+dashboard_template = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {username}!</h1>
+    <p>You are logged in.</p>
+    <!-- Additional dashboard content here -->
+</body>
+</html>
+'''
 # Database connection initialization and functions
 
 def connect_to_db():
