@@ -17,7 +17,6 @@ DB_PASS = "root"
 # Login template
 
 
-
 # Registration template
 login_template = '''
 <!DOCTYPE html>
