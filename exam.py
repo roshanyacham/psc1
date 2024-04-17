@@ -326,16 +326,44 @@ def handle_client(client_socket):
                 response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n" + login_template
             elif request_path == '/register':
                 response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n" + register_template
+            elif request_path == '/create_course':
+                response == "HTTP/1.1 200 OK\nContent-Type: text/html\n\n"+ create_course_template
         elif request_method == 'POST':
             if request_path == '/login':
                 response = handle_login(client_socket, request_data)
             elif request_path == '/register':
                 response = handle_register(client_socket, request_data)
+            elif request_path == '/create_course': 
+                response = handle_create_course(client_socket, request_data)  
         else:
             response = "HTTP/1.1 405 Method Not Allowed\n\n405 Method Not Allowed"
 
         client_socket.sendall(response.encode('utf-8'))
         client_socket.close()
+
+
+def handle_create_course(client_socket, request_data):
+    # Extract course name and description from request data
+    request_lines = request_data.split('\n')
+    form_data = request_lines[-1]
+    parsed_form_data = urllib.parse.parse_qs(form_data)
+    
+    # Check if both course name and description are present in the form data
+    if 'course_name' in parsed_form_data and 'description' in parsed_form_data:
+        course_name = parsed_form_data['course_name'][0]
+        description = parsed_form_data['description'][0]
+
+        # Call the create_course function
+        create_course(course_name, description)
+
+        # Construct HTML response - for simplicity, just redirect back to create course page
+        response = "HTTP/1.1 302 Found\nLocation: /create_course\n\n"
+    else:
+        # If either course name or description is missing, return a bad request response
+        response = "HTTP/1.1 400 Bad Request\nContent-Type: text/html\n\nMissing course name or description."
+
+    client_socket.sendall(response.encode('utf-8'))
+    client_socket.close()
 
 
 def handle_login(client_socket, request_data):
